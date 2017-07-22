@@ -1,0 +1,33 @@
+--- vapoursynth-R38/src/core/cpufeatures.c.orig	2017-05-29 13:09:06.000000000 +0200
++++ vapoursynth-R38/src/core/cpufeatures.c	2017-07-21 21:43:00.895082739 +0200
+@@ -61,6 +61,7 @@ void getCPUFeatures(CPUFeatures *cpuFeat
+     }
+ }
+ #elif defined(VS_TARGET_OS_LINUX)
++#if defined(VS_TARGET_CPU_ARM) || defined(VS_TARGET_CPU_POWERPC)
+ #include <sys/auxv.h>
+ 
+ void getCPUFeatures(CPUFeatures *cpuFeatures) {
+@@ -89,5 +90,11 @@ void getCPUFeatures(CPUFeatures *cpuFeat
+ #endif
+ }
+ #else
++void getCPUFeatures(CPUFeatures *cpuFeatures) {
++    memset(cpuFeatures, 0, sizeof(CPUFeatures));
++    cpuFeatures->can_run_vs = 1;
++}
++#endif
++#else
+ #error Do not know how to get CPU features.
+ #endif
+--- vapoursynth-R38/src/core/cpufeatures.h.orig	2017-05-29 13:09:06.000000000 +0200
++++ vapoursynth-R38/src/core/cpufeatures.h	2017-07-21 21:41:25.271750498 +0200
+@@ -51,8 +51,6 @@ typedef struct CPUFeatures {
+     char efp_double;
+     char dfp;
+     char vsx;
+-#else
+-#error No VS_TARGET_CPU_* defined/handled!
+ #endif
+ } CPUFeatures;
+ 
