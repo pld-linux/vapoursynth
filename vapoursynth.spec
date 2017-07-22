@@ -5,7 +5,8 @@
 %bcond_with	sse		# use SSE/SSE2 instructions on x86 (no runtime detection)
 %bcond_without	static_libs	# static libraries
 #
-%ifarch pentium4 %{x8664} x32
+%ifarch pentium4 %{x8664}
+# x32 asm is not supported (as of 38)
 %define	with_sse	1
 %endif
 Summary:	A video processing framework with simplicity in mind
