@@ -1,6 +1,6 @@
---- vapoursynth-R38/src/core/cpufeatures.c.orig	2017-05-29 13:09:06.000000000 +0200
-+++ vapoursynth-R38/src/core/cpufeatures.c	2017-07-21 21:43:00.895082739 +0200
-@@ -61,6 +61,7 @@ void getCPUFeatures(CPUFeatures *cpuFeat
+--- vapoursynth-R45.1/src/core/cpufeatures.c.orig	2018-10-26 23:11:05.000000000 +0200
++++ vapoursynth-R45.1/src/core/cpufeatures.c	2019-04-27 11:23:33.512030568 +0200
+@@ -70,6 +70,7 @@
      }
  }
  #elif defined(VS_TARGET_OS_LINUX)
@@ -8,7 +8,7 @@
  #include <sys/auxv.h>
  
  void getCPUFeatures(CPUFeatures *cpuFeatures) {
-@@ -89,5 +90,11 @@ void getCPUFeatures(CPUFeatures *cpuFeat
+@@ -98,5 +99,11 @@
  #endif
  }
  #else
@@ -18,16 +18,16 @@
 +}
 +#endif
 +#else
- #error Do not know how to get CPU features.
+ #warning "Do not know how to get CPU features."
  #endif
---- vapoursynth-R38/src/core/cpufeatures.h.orig	2017-05-29 13:09:06.000000000 +0200
-+++ vapoursynth-R38/src/core/cpufeatures.h	2017-07-21 21:41:25.271750498 +0200
-@@ -51,8 +51,6 @@ typedef struct CPUFeatures {
+--- vapoursynth-R45.1/src/core/cpufeatures.h.orig	2019-04-27 09:40:11.058965473 +0200
++++ vapoursynth-R45.1/src/core/cpufeatures.h	2019-04-27 11:14:27.121657286 +0200
+@@ -59,8 +59,6 @@
      char efp_double;
      char dfp;
      char vsx;
 -#else
--#error No VS_TARGET_CPU_* defined/handled!
+-#warning "No VS_TARGET_CPU_* defined/handled!"
  #endif
  } CPUFeatures;
  

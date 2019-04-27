@@ -2,6 +2,7 @@
 # Conditional build:
 %bcond_without	doc		# documentation
 %bcond_without	ffmpeg		# subtext plugin (libass+ffmpeg based)
+%bcond_with	im		# imwri plugin (requires ImageMagick with Q16 or Q32 and HDRI support)
 %bcond_with	sse		# use SSE/SSE2 instructions on x86 (no runtime detection)
 %bcond_without	static_libs	# static libraries
 #
@@ -12,16 +13,16 @@
 Summary:	A video processing framework with simplicity in mind
 Summary(pl.UTF-8):	Szkielet do przetwarzania obrazu stworzony z myślą o prostocie
 Name:		vapoursynth
-Version:	38
-Release:	7
+Version:	45.1
+Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
 #Source0Download: https://github.com/vapoursynth/vapoursynth/releases
 Source0:	https://github.com/vapoursynth/vapoursynth/archive/R%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	78d0183f0afd3702f3edc176b2491f5d
+# Source0-md5:	a8fb4e106028bb006ca1ee13724fe1f3
 Patch0:		%{name}-genericarch.patch
 URL:		http://www.vapoursynth.com/
-BuildRequires:	ImageMagick-c++-devel >= 1:7
+%{?with_im:BuildRequires:	ImageMagick-c++-devel >= 1:7}
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake >= 1:1.11
 # libavcodec libavformat libavutil
@@ -29,21 +30,24 @@ BuildRequires:	automake >= 1:1.11
 %{?with_ffmpeg:BuildRequires:	libass-devel}
 BuildRequires:	libstdc++-devel >= 6:4.8
 BuildRequires:	libtool >= 2:2
+%if %{with sse}
+BuildRequires:	nasm
+%endif
 BuildRequires:	pkgconfig
 BuildRequires:	python3-Cython
 BuildRequires:	python3-devel >= 1:3.2
 BuildRequires:	sed >= 4.0
 %{?with_doc:BuildRequires:	sphinx-pdg}
 BuildRequires:	tesseract-devel >= 3
-%if %{with sse}
-BuildRequires:	yasm
-%endif
 BuildRequires:	zimg-devel >= 2.5
 %if %{with sse}
 Requires:	cpuinfo(sse2)
 %endif
 Requires:	python3-libs >= 1:3.2
 Requires:	zimg >= 2.5
+%if %{without im}
+Obsoletes:	vapoursynth-plugin-imwri
+%endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # non-function std::__once_call, std::__once_callable symbols
@@ -149,6 +153,7 @@ Dokumentacja do biblioteki VapourSynth.
 %{__autoconf}
 %{__automake}
 %configure \
+	%{!?with_im:--disable-imwri} \
 	--disable-silent-rules \
 	%{!?with_ffmpeg:--disable-subtext} \
 	%{!?with_static_libs:--disable-static} \
@@ -193,10 +198,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/vapoursynth/libvinverse.so
 %attr(755,root,root) %{_libdir}/vapoursynth/libvivtc.so
 
+%if %{with im}
 %files plugin-imwri
 %defattr(644,root,root,755)
 # R: ImageMagick-c++ >= 1:7
 %attr(755,root,root) %{_libdir}/vapoursynth/libimwri.so
+%endif
 
 %files plugin-ocr
 %defattr(644,root,root,755)
