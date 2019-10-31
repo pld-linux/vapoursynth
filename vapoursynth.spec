@@ -143,7 +143,9 @@ Dokumentacja do biblioteki VapourSynth.
 %prep
 %setup -q -n %{name}-R%{version}
 %patch0 -p1
+%if "%{py3_ver}" >= "3.8"
 %patch1 -p1
+%endif
 
 %if %{without sse}
 %{__sed} -i -e 's/"-mfpmath=sse -msse2"/""/' configure.ac
