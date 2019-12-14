@@ -1,6 +1,6 @@
 diff -ur vapoursynth-R48.orig/src/core/cpufeatures.cpp vapoursynth-R48/src/core/cpufeatures.cpp
 --- vapoursynth-R48.orig/src/core/cpufeatures.cpp	2019-10-25 08:16:07.000000000 +0200
-+++ vapoursynth-R48/src/core/cpufeatures.cpp	2019-12-14 13:39:34.121000000 +0100
++++ vapoursynth-R48/src/core/cpufeatures.cpp	2019-12-14 14:11:01.285000000 +0100
 @@ -103,6 +103,7 @@
      }
  }
@@ -13,7 +13,7 @@ diff -ur vapoursynth-R48.orig/src/core/cpufeatures.cpp vapoursynth-R48/src/core/
  #endif
  }
  #else
-+void getCPUFeatures(CPUFeatures *cpuFeatures) {
++static void doGetCPUFeatures(CPUFeatures *cpuFeatures) {
 +    memset(cpuFeatures, 0, sizeof(CPUFeatures));
 +    cpuFeatures->can_run_vs = 1;
 +}
