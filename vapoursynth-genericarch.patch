@@ -1,14 +1,15 @@
---- vapoursynth-R45.1/src/core/cpufeatures.c.orig	2018-10-26 23:11:05.000000000 +0200
-+++ vapoursynth-R45.1/src/core/cpufeatures.c	2019-04-27 11:23:33.512030568 +0200
-@@ -70,6 +70,7 @@
+diff -ur vapoursynth-R48.orig/src/core/cpufeatures.cpp vapoursynth-R48/src/core/cpufeatures.cpp
+--- vapoursynth-R48.orig/src/core/cpufeatures.cpp	2019-10-25 08:16:07.000000000 +0200
++++ vapoursynth-R48/src/core/cpufeatures.cpp	2019-12-14 13:39:34.121000000 +0100
+@@ -103,6 +103,7 @@
      }
  }
  #elif defined(VS_TARGET_OS_LINUX)
 +#if defined(VS_TARGET_CPU_ARM) || defined(VS_TARGET_CPU_POWERPC)
  #include <sys/auxv.h>
  
- void getCPUFeatures(CPUFeatures *cpuFeatures) {
-@@ -98,5 +99,11 @@
+ static void doGetCPUFeatures(CPUFeatures *cpuFeatures) {
+@@ -131,6 +132,12 @@
  #endif
  }
  #else
@@ -20,9 +21,11 @@
 +#else
  #warning "Do not know how to get CPU features."
  #endif
---- vapoursynth-R45.1/src/core/cpufeatures.h.orig	2019-04-27 09:40:11.058965473 +0200
-+++ vapoursynth-R45.1/src/core/cpufeatures.h	2019-04-27 11:14:27.121657286 +0200
-@@ -59,8 +59,6 @@
+ 
+diff -ur vapoursynth-R48.orig/src/core/cpufeatures.h vapoursynth-R48/src/core/cpufeatures.h
+--- vapoursynth-R48.orig/src/core/cpufeatures.h	2019-10-25 08:16:07.000000000 +0200
++++ vapoursynth-R48/src/core/cpufeatures.h	2019-12-14 13:40:09.419000000 +0100
+@@ -63,8 +63,6 @@
      char efp_double;
      char dfp;
      char vsx;
