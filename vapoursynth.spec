@@ -22,6 +22,7 @@ Source0:	https://github.com/vapoursynth/vapoursynth/archive/R%{version}/%{name}-
 # Source0-md5:	4acbd7521e0aa3d403c93532271d6880
 Patch0:		%{name}-genericarch.patch
 Patch1:		python-3.8.patch
+Patch2:		%{name}-sse2.patch
 URL:		http://www.vapoursynth.com/
 %{?with_im:BuildRequires:	ImageMagick-c++-devel >= 1:7}
 BuildRequires:	autoconf >= 2.50
@@ -146,6 +147,7 @@ Dokumentacja do biblioteki VapourSynth.
 %if "%{py3_ver}" >= "3.8"
 %patch1 -p1
 %endif
+%patch2 -p1
 
 %if %{without sse}
 %{__sed} -i -e 's/"-mfpmath=sse -msse2"/""/' configure.ac
