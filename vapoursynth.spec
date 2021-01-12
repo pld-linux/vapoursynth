@@ -13,13 +13,13 @@
 Summary:	A video processing framework with simplicity in mind
 Summary(pl.UTF-8):	Szkielet do przetwarzania obrazu stworzony z myślą o prostocie
 Name:		vapoursynth
-Version:	50
+Version:	52
 Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
 #Source0Download: https://github.com/vapoursynth/vapoursynth/releases
 Source0:	https://github.com/vapoursynth/vapoursynth/archive/R%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	78d4a1f608c1b986337579d6dd9db0f9
+# Source0-md5:	e6b37c3c7af6902f3835182292668550
 Patch0:		%{name}-sse2.patch
 URL:		http://www.vapoursynth.com/
 %{?with_im:BuildRequires:	ImageMagick-c++-devel >= 1:7}
@@ -36,6 +36,7 @@ BuildRequires:	nasm
 BuildRequires:	pkgconfig
 BuildRequires:	python3-Cython
 BuildRequires:	python3-devel >= 1:3.2
+BuildRequires:	rpmbuild(macros) >= 1.752
 BuildRequires:	sed >= 4.0
 %{?with_doc:BuildRequires:	sphinx-pdg}
 BuildRequires:	tesseract-devel >= 3
@@ -129,9 +130,7 @@ Statyczne biblioteki VapourSynth.
 Summary:	Documentation for VapourSynth library
 Summary(pl.UTF-8):	Dokumentacja do biblioteki VapourSynth
 Group:		Documentation
-%if "%{_rpmversion}" >= "5"
-BuildArch:	noarch
-%endif
+%{?noarchpackage}
 
 %description doc
 Documentation for VapourSynth library.
@@ -184,7 +183,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc ChangeLog ofl.txt
+%doc ChangeLog README.md
 %attr(755,root,root) %{_bindir}/vspipe
 %attr(755,root,root) %{_libdir}/libvapoursynth.so
 %attr(755,root,root) %{_libdir}/libvapoursynth-script.so.*.*.*
