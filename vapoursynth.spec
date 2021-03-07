@@ -130,7 +130,7 @@ Statyczne biblioteki VapourSynth.
 Summary:	Documentation for VapourSynth library
 Summary(pl.UTF-8):	Dokumentacja do biblioteki VapourSynth
 Group:		Documentation
-%{?noarchpackage}
+BuildArch:	noarch
 
 %description doc
 Documentation for VapourSynth library.
