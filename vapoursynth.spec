@@ -47,7 +47,7 @@ Requires:	cpuinfo(sse2)
 Requires:	python3-libs >= 1:3.2
 Requires:	zimg >= 2.5
 %if %{without im}
-Obsoletes:	vapoursynth-plugin-imwri
+Obsoletes:	vapoursynth-plugin-imwri < %{version}-%{release}
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
