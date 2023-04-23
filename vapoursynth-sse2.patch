@@ -1,31 +1,31 @@
---- vapoursynth-R50/Makefile.am.orig	2020-07-06 20:53:20.109771817 +0200
-+++ vapoursynth-R50/Makefile.am	2020-07-06 20:53:23.166421924 +0200
-@@ -85,7 +85,7 @@
+--- vapoursynth-R62/Makefile.am.orig	2023-04-23 21:44:20.035726545 +0200
++++ vapoursynth-R62/Makefile.am	2023-04-23 21:48:53.884242981 +0200
+@@ -94,7 +94,7 @@ libvapoursynth_la_LIBADD = $(PTHREAD_LIB
  
  
  if X86ASM
 -noinst_LTLIBRARIES += libvapoursynth_avx2.la
 +noinst_LTLIBRARIES += libvapoursynth_avx2.la libvapoursynth_sse2.la
  
- libvapoursynth_avx2_la_SOURCES = src/core/kernel/x86/generic_avx2.cpp \
- 								 src/core/kernel/x86/merge_avx2.c \
-@@ -93,13 +93,18 @@
- libvapoursynth_avx2_la_CFLAGS = $(AM_CFLAGS) $(AVX2FLAGS)
+ libvapoursynth_avx2_la_SOURCES = src/core/kernel/x86/convolution_avx2.cpp \
+ 								 src/core/kernel/x86/generic_avx2.cpp \
+@@ -104,15 +104,18 @@ libvapoursynth_avx2_la_CFLAGS = $(AM_CFL
  libvapoursynth_avx2_la_CXXFLAGS = $(AM_CXXFLAGS) $(AVX2FLAGS)
  
--libvapoursynth_la_SOURCES += src/core/jitasm.h \
+ libvapoursynth_la_SOURCES += src/core/expr/jitasm.h \
+-							 src/core/expr/jitcompiler_x86.cpp \
++							 src/core/expr/jitcompiler_x86.cpp
 +libvapoursynth_sse2_la_SOURCES = \
+ 							 src/core/kernel/x86/average_sse2.c \
+ 							 src/core/kernel/x86/convolution_sse2.cpp \
  							 src/core/kernel/x86/generic_sse2.cpp \
  							 src/core/kernel/x86/merge_sse2.c \
  							 src/core/kernel/x86/planestats_sse2.c \
  							 src/core/kernel/x86/transpose_sse2.c
++libvapoursynth_sse2_la_CFLAGS = $(AM_CFLAGS) -msse2
++libvapoursynth_sse2_la_CXXFLAGS = $(AM_CXXFLAGS) -msse2
  
 -libvapoursynth_la_LIBADD += libvapoursynth_avx2.la
-+libvapoursynth_sse2_la_CFLAGS = $(AM_CFLAGS) -msse2
-+libvapoursynth_sse2_la_CXXFLAGS = $(AM_CFLAGS) -msse2
-+
-+libvapoursynth_la_SOURCES += src/core/jitasm.h
-+
 +libvapoursynth_la_LIBADD += libvapoursynth_avx2.la libvapoursynth_sse2.la
  endif # X86ASM
  

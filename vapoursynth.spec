@@ -11,18 +11,18 @@
 Summary:	A video processing framework with simplicity in mind
 Summary(pl.UTF-8):	Szkielet do przetwarzania obrazu stworzony z myślą o prostocie
 Name:		vapoursynth
-Version:	55
+Version:	62
 Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
 #Source0Download: https://github.com/vapoursynth/vapoursynth/releases
-Source0:	https://github.com/vapoursynth/vapoursynth/archive/R%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	16d1e2806413ddd847728743638027f8
+Source0:	https://github.com/vapoursynth/vapoursynth/archive/R%{version}/%{name}-R%{version}.tar.gz
+# Source0-md5:	0e820ade7563871b38363876f25bc704
 Patch0:		%{name}-sse2.patch
 URL:		http://www.vapoursynth.com/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake >= 1:1.11
-BuildRequires:	libstdc++-devel >= 6:4.8
+BuildRequires:	libstdc++-devel >= 6:5
 BuildRequires:	libtool >= 2:2
 %if %{with sse}
 BuildRequires:	nasm
@@ -33,8 +33,11 @@ BuildRequires:	python3-devel >= 1:3.2
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.752
 BuildRequires:	sed >= 4.0
-%{?with_doc:BuildRequires:	sphinx-pdg}
 BuildRequires:	zimg-devel >= 2.5
+%if %{with doc}
+BuildRequires:	python3-sphinx_rtd_theme
+BuildRequires:	sphinx-pdg-3
+%endif
 %if %{with sse}
 Requires:	cpuinfo(sse2)
 %endif
@@ -114,7 +117,7 @@ Dokumentacja do biblioteki VapourSynth.
 %{__make}
 
 %if %{with doc}
-%{__make} -C doc html
+sphinx-build-3 -b html doc doc/_build/html
 %endif
 
 %install
@@ -161,5 +164,5 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with doc}
 %files doc
 %defattr(644,root,root,755)
-%doc doc/_build/html/{_static,api,functions,*.html,*.js}
+%doc doc/_build/html/{_static,functions,*.html,*.js}
 %endif
