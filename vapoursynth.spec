@@ -11,13 +11,13 @@
 Summary:	A video processing framework with simplicity in mind
 Summary(pl.UTF-8):	Szkielet do przetwarzania obrazu stworzony z myślą o prostocie
 Name:		vapoursynth
-Version:	65
+Version:	68
 Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
 #Source0Download: https://github.com/vapoursynth/vapoursynth/releases
 Source0:	https://github.com/vapoursynth/vapoursynth/archive/R%{version}/%{name}-R%{version}.tar.gz
-# Source0-md5:	705d8451764faceec82752ebbabdc643
+# Source0-md5:	ac6e8ea4f92d86ae76e269c66f882773
 Patch0:		%{name}-sse2.patch
 URL:		http://www.vapoursynth.com/
 BuildRequires:	autoconf >= 2.50
@@ -33,7 +33,7 @@ BuildRequires:	python3-devel >= 1:3.2
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.752
 BuildRequires:	sed >= 4.0
-BuildRequires:	zimg-devel >= 2.5
+BuildRequires:	zimg-devel >= 3.0.5
 %if %{with doc}
 BuildRequires:	python3-sphinx_rtd_theme
 BuildRequires:	sphinx-pdg-3
@@ -42,7 +42,7 @@ BuildRequires:	sphinx-pdg-3
 Requires:	cpuinfo(sse2)
 %endif
 Requires:	python3-libs >= 1:3.2
-Requires:	zimg >= 2.5
+Requires:	zimg >= 3.0.5
 Obsoletes:	vapoursynth-plugin-imwri < 54-5
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -65,7 +65,7 @@ Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek VapourSynth
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	python3-devel >= 1:3.2
-Requires:	zimg-devel >= 2.5
+Requires:	zimg-devel >= 3.0.5
 
 %description devel
 Header files for VapourSynth libraries.
