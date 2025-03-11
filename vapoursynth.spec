@@ -12,7 +12,7 @@ Summary:	A video processing framework with simplicity in mind
 Summary(pl.UTF-8):	Szkielet do przetwarzania obrazu stworzony z myślą o prostocie
 Name:		vapoursynth
 Version:	68
-Release:	
+Release:	2
 License:	LGPL v2.1+
 Group:		Libraries
 #Source0Download: https://github.com/vapoursynth/vapoursynth/releases
@@ -51,7 +51,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 VapourSynth is an application for video manipulation. Or a plugin. Or
-a library. It's hard to tell  because it has a core library written in
+a library. It's hard to tell because it has a core library written in
 C++ and a Python module to allow video scripts to be created.
 
 %description -l pl.UTF-8
@@ -99,7 +99,7 @@ Dokumentacja do biblioteki VapourSynth.
 
 %prep
 %setup -q -n %{name}-R%{version}
-%patch0 -p1
+%patch -P 0 -p1
 
 %if %{without sse}
 %{__sed} -i -e 's/"-mfpmath=sse -msse2"/""/' configure.ac
