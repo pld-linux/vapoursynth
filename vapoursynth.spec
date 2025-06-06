@@ -11,13 +11,13 @@
 Summary:	A video processing framework with simplicity in mind
 Summary(pl.UTF-8):	Szkielet do przetwarzania obrazu stworzony z myślą o prostocie
 Name:		vapoursynth
-Version:	68
-Release:	3
+Version:	72
+Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
 #Source0Download: https://github.com/vapoursynth/vapoursynth/releases
 Source0:	https://github.com/vapoursynth/vapoursynth/archive/R%{version}/%{name}-R%{version}.tar.gz
-# Source0-md5:	ac6e8ea4f92d86ae76e269c66f882773
+# Source0-md5:	e8dc8f3d327805b0a893c65c1a772745
 Patch0:		%{name}-sse2.patch
 URL:		http://www.vapoursynth.com/
 BuildRequires:	autoconf >= 2.50
