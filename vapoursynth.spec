@@ -11,6 +11,8 @@
 Summary:	A video processing framework with simplicity in mind
 Summary(pl.UTF-8):	Szkielet do przetwarzania obrazu stworzony z myślą o prostocie
 Name:		vapoursynth
+# versions >= 73 removes VSScript v3 API, used by ffmpeg 6.1.x
+# versions >= 77 (or lower) removes system-wide library, moving all to python plugin tree
 Version:	72
 Release:	1
 License:	LGPL v2.1+
