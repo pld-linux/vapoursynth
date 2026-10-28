@@ -9,7 +9,7 @@ Name:		vapoursynth
 # versions >= 73 removes VSScript v3 API, used by ffmpeg 6.1.x
 # versions >= 77 (or lower) removes system-wide library, moving all to python plugin tree
 Version:	81
-Release:	0.2
+Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
 #Source0Download: https://github.com/vapoursynth/vapoursynth/releases
