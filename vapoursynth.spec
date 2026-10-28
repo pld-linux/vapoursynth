@@ -115,13 +115,15 @@ install -d $RPM_BUILD_ROOT{%{_pkgconfigdir},{%{_libdir},%{_includedir}}/vapoursy
 
 %py3_install_pyproject
 
+install -d $RPM_BUILD_ROOT%{py3_sitedir}/vapoursynth/plugins
+
 ln -sr $RPM_BUILD_ROOT%{py3_sitedir}/vapoursynth/libvapoursynth.so.4 $RPM_BUILD_ROOT%{_libdir}
 ln -sr $RPM_BUILD_ROOT%{py3_sitedir}/vapoursynth/libvapoursynth.so.4 $RPM_BUILD_ROOT%{_libdir}/libvapoursynth.so
 ln -sr $RPM_BUILD_ROOT%{py3_sitedir}/vapoursynth/libvsscript.so $RPM_BUILD_ROOT%{_libdir}
 
 %{__mv} $RPM_BUILD_ROOT%{py3_sitedir}/vapoursynth/include/* $RPM_BUILD_ROOT%{_includedir}/vapoursynth
 %{__rm} -r $RPM_BUILD_ROOT%{py3_sitedir}/vapoursynth/include
-%{__ln} -sr $RPM_BUILD_ROOT%{_includedir}/vapoursynth $RPM_BUILD_ROOT%{py3_sitedir}/vapoursynth/include
+ln -sr $RPM_BUILD_ROOT%{_includedir}/vapoursynth $RPM_BUILD_ROOT%{py3_sitedir}/vapoursynth/include
 
 %{__rm} -r $RPM_BUILD_ROOT%{py3_sitedir}/vapoursynth/pkgconfig
 
