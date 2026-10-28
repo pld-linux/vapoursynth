@@ -1,13 +1,8 @@
 #
 # Conditional build:
 %bcond_without	doc		# documentation
-%bcond_with	sse		# use SSE/SSE2 instructions on x86 (no runtime detection)
 %bcond_without	static_libs	# static libraries
 #
-%ifarch pentium4 %{x8664}
-# x32 asm is not supported (as of 38)
-%define	with_sse	1
-%endif
 Summary:	A video processing framework with simplicity in mind
 Summary(pl.UTF-8):	Szkielet do przetwarzania obrazu stworzony z myślą o prostocie
 Name:		vapoursynth
@@ -93,11 +88,20 @@ Dokumentacja do biblioteki VapourSynth.
 %patch -P0 -p1
 
 %build
+export LDFLAGS="%{rpmldflags}"
+%ifarch %{ix86}
+export CFLAGS="%{rpmcflags} -msse2"
+export CXXFLAGS="%{rpmcxxflags} -msse2"
+%else
 export CFLAGS="%{rpmcflags}"
 export CXXFLAGS="%{rpmcxxflags}"
-export LDFLAGS="%{rpmldflags}"
+%endif
 %py3_build_pyproject \
-	-Csetup-args="-Denable_x86_asm=%{!?with_sse:false}%{?with_sse:true}" \
+%ifarch %{x8664}
+	-Csetup-args="-Denable_x86_asm=true" \
+%else
+	-Csetup-args="-Denable_x86_asm=false" \
+%endif
 	-Ccompile-args="--verbose" \
 	-Ccompile-args="%{?_smp_mflags}"
 
