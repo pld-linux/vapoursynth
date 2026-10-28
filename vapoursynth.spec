@@ -13,25 +13,25 @@ Summary(pl.UTF-8):	Szkielet do przetwarzania obrazu stworzony z myślą o prosto
 Name:		vapoursynth
 # versions >= 73 removes VSScript v3 API, used by ffmpeg 6.1.x
 # versions >= 77 (or lower) removes system-wide library, moving all to python plugin tree
-Version:	72
-Release:	1
+Version:	81
+Release:	0.1
 License:	LGPL v2.1+
 Group:		Libraries
 #Source0Download: https://github.com/vapoursynth/vapoursynth/releases
 Source0:	https://github.com/vapoursynth/vapoursynth/archive/R%{version}/%{name}-R%{version}.tar.gz
-# Source0-md5:	e8dc8f3d327805b0a893c65c1a772745
-Patch0:		%{name}-sse2.patch
+# Source0-md5:	1a60f95419daf7e6147ef5b68c688518
+Patch0:		system-glslang.patch
 URL:		http://www.vapoursynth.com/
-BuildRequires:	autoconf >= 2.50
-BuildRequires:	automake >= 1:1.11
+BuildRequires:	Vulkan-Headers
+BuildRequires:	glslang-devel >= 16.4.0
 BuildRequires:	libstdc++-devel >= 6:7
-BuildRequires:	libtool >= 2:2
 %if %{with sse}
 BuildRequires:	nasm
 %endif
 BuildRequires:	pkgconfig
-BuildRequires:	python3-Cython
+BuildRequires:	python3-Cython >= 3.3.0
 BuildRequires:	python3-devel >= 1:3.2
+BuildRequires:	python3-meson-python >= 0.22.1
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.752
 BuildRequires:	sed >= 4.0
@@ -101,22 +101,16 @@ Dokumentacja do biblioteki VapourSynth.
 
 %prep
 %setup -q -n %{name}-R%{version}
-%patch -P 0 -p1
-
-%if %{without sse}
-%{__sed} -i -e 's/"-mfpmath=sse -msse2"/""/' configure.ac
-%endif
+%patch -P0 -p1
 
 %build
-%{__libtoolize}
-%{__aclocal}
-%{__autoconf}
-%{__automake}
-%configure \
-	--disable-silent-rules \
-	%{!?with_static_libs:--disable-static} \
-	%{!?with_sse:--disable-x86-asm}
-%{__make}
+export CFLAGS="%{rpmcflags}"
+export CXXFLAGS="%{rpmcxxflags}"
+export LDFLAGS="%{rpmldflags}"
+%py3_build_pyproject \
+	-Csetup-args="-Denable_x86_asm=%{!?with_sse:false}%{?with_sse:true}" \
+	-Ccompile-args="--verbose" \
+	-Ccompile-args="%{?_smp_mflags}"
 
 %if %{with doc}
 sphinx-build-3 -b html doc doc/_build/html
@@ -126,12 +120,7 @@ sphinx-build-3 -b html doc doc/_build/html
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_libdir}/vapoursynth
 
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
-
-%{__rm}	$RPM_BUILD_ROOT%{py3_sitedir}/vapoursynth.la
-# obsoleted by pkg-config
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/libvapoursynth*.la
+%py3_install_pyproject
 
 %clean
 rm -rf $RPM_BUILD_ROOT

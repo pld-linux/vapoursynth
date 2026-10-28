@@ -1,0 +1,11 @@
+--- vapoursynth-R81/meson.build~	2026-10-04 22:48:11.000000000 +0200
++++ vapoursynth-R81/meson.build	2026-10-27 22:33:16.206544225 +0100
+@@ -186,7 +186,7 @@
+ # Runtime GLSL to SPIR-V compilation: glslang is embedded statically and always present,
+ # taken from the wrap rather than the system so the accepted dialect stays a pinned
+ # platform property instead of following whatever glslang the machine happens to have.
+-glslang_dep = subproject('glslang').get_variable('glslang_dep')
++glslang_dep = [dependency('glslang'), cxx.find_library('glslang-default-resource-limits')]
+ 
+ soversion = is_win ? '' : run_command(
+     'grep',
