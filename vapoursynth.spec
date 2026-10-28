@@ -68,24 +68,13 @@ Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	python3-devel >= 1:3.2
 Requires:	zimg-devel >= 3.0.5
+Obsoletes:	vapoursynth-static < 81
 
 %description devel
 Header files for VapourSynth libraries.
 
 %description devel -l pl.UTF-8
 Pliki nagłówkowe bibliotek VapourSynth.
-
-%package static
-Summary:	Static VapourSynth libraries
-Summary(pl.UTF-8):	Statyczne biblioteki VapourSynth
-Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
-
-%description static
-Static VapourSynth libraries.
-
-%description static -l pl.UTF-8
-Statyczne biblioteki VapourSynth.
 
 %package doc
 Summary:	Documentation for VapourSynth library
@@ -118,9 +107,31 @@ sphinx-build-3 -b html doc doc/_build/html
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_libdir}/vapoursynth
+install -d $RPM_BUILD_ROOT{%{_pkgconfigdir},{%{_libdir},%{_includedir}}/vapoursynth}
 
 %py3_install_pyproject
+
+ln -sr $RPM_BUILD_ROOT%{py3_sitedir}/vapoursynth/libvapoursynth.so.4 $RPM_BUILD_ROOT%{_libdir}
+ln -sr $RPM_BUILD_ROOT%{py3_sitedir}/vapoursynth/libvapoursynth.so.4 $RPM_BUILD_ROOT%{_libdir}/libvapoursynth.so
+ln -sr $RPM_BUILD_ROOT%{py3_sitedir}/vapoursynth/libvsscript.so $RPM_BUILD_ROOT%{_libdir}
+
+%{__mv} $RPM_BUILD_ROOT%{py3_sitedir}/vapoursynth/include/* $RPM_BUILD_ROOT%{_includedir}/vapoursynth
+
+%{__rm} -r $RPM_BUILD_ROOT%{py3_sitedir}/vapoursynth/include
+%{__rm} -r $RPM_BUILD_ROOT%{py3_sitedir}/vapoursynth/pkgconfig
+
+# Installed pkgconfig is completely useless, wrong directories and no libs
+cat >$RPM_BUILD_ROOT%{_pkgconfigdir}/vapoursynth.pc <<'EOF'
+prefix=%{_prefix}
+libdir=%{_libdir}
+includedir=%{_includedir}/%{name}
+
+Name: vapoursynth
+Description: A frameserver for the 21st century
+Version: %{version}
+Cflags: -I${includedir}
+Libs: -L${libdir} -lvapoursynth
+EOF
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -131,26 +142,19 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc ChangeLog README.md
+%attr(755,root,root) %{_bindir}/vapoursynth
 %attr(755,root,root) %{_bindir}/vspipe
-%attr(755,root,root) %{_libdir}/libvapoursynth.so
-%attr(755,root,root) %{_libdir}/libvapoursynth-script.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libvapoursynth-script.so.0
-%attr(755,root,root) %{py3_sitedir}/vapoursynth.so
+%{_libdir}/libvapoursynth.so.4
+%ghost %{_libdir}/libvsscript.so
+%{py3_sitedir}/vapoursynth
+%{py3_sitedir}/%{name}-%{version}.dist-info
 %dir %{_libdir}/vapoursynth
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libvapoursynth-script.so
+%{_libdir}/libvapoursynth.so
 %{_includedir}/vapoursynth
 %{_pkgconfigdir}/vapoursynth.pc
-%{_pkgconfigdir}/vapoursynth-script.pc
-
-%if %{with static_libs}
-%files static
-%defattr(644,root,root,755)
-%{_libdir}/libvapoursynth.a
-%{_libdir}/libvapoursynth-script.a
-%endif
 
 %if %{with doc}
 %files doc
